@@ -28,20 +28,18 @@ func (m *MultiObfuscator) Type() string {
 	return ""
 }
 
-func (m *MultiObfuscator) Report() map[string]string {
-	multiReport := map[string]string{}
+func (m *MultiObfuscator) Report() ReplacementReport {
+	var replacements []Replacement
 	for _, obfuscator := range m.obfuscators {
 		report := obfuscator.Report()
-		for k, v := range report {
-			multiReport[k] = v
-		}
+		replacements = append(replacements, report.Replacements...)
 	}
 
-	return multiReport
+	return ReplacementReport{Replacements: replacements}
 }
 
-func (m *MultiObfuscator) ReportPerObfuscator() []map[string]string {
-	var multiReport []map[string]string
+func (m *MultiObfuscator) ReportPerObfuscator() []ReplacementReport {
+	var multiReport []ReplacementReport
 	for i := range m.obfuscators {
 		multiReport = append(multiReport, m.obfuscators[i].Report())
 	}
